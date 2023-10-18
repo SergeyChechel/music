@@ -178,11 +178,8 @@
 </template>
 
 <script>
-  export default {
-    name: 'manage',
-    beforeRouteEnter(to, from, next) {
-      console.log('beforeRouteEnter Guard');
-      next();
-    }
-  }
+
+export default {
+  name: 'manage',
+}
 </script>
