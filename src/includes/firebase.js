@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore"; // firebase/database в старой редакции
+import "firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDVhXvgFggX3_PKP-mDTPg1tnGibRjxVTk",
@@ -15,11 +16,13 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db = firebase.firestore();
+const storage = firebase.storage();
 
 const usersCollection = db.collection('users'); 
 
 export {
   auth,
   db,
-  usersCollection
+  usersCollection,
+  storage
 }
