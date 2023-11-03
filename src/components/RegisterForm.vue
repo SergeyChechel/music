@@ -139,7 +139,7 @@ export default {
       this.reg_alert_msg = 'Please wait! Your account is being created.'
 
       try {
-        this.createUser(values)
+        await this.createUser(values)
       } catch (err) {
         const errorCode = err.code
         if (errorCode == 'auth/weak-password') {
