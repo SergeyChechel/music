@@ -29,15 +29,18 @@
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
-        <form>
-          <textarea
+        <vee-form :validation-schema="schema">
+          <vee-field
+            as="textarea"
+            name="comment"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded mb-4"
             placeholder="Your comment here..."
-          ></textarea>
+          ></vee-field>
+          <ErrorMessage class="text-red-600" name="comment" />
           <button type="submit" class="py-1.5 px-3 rounded text-white bg-green-600 block">
             Submit
           </button>
-        </form>
+        </vee-form>
         <!-- Sort Comments -->
         <select
           class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
@@ -127,24 +130,26 @@
 
 <script>
 import { songsCollection } from '@/includes/firebase'
+import { ErrorMessage } from 'vee-validate'
 
 export default {
   name: 'Song',
   data() {
     return {
-      song: {}
+      song: {},
+      schema: {
+        comment: 'required|min:3'
+      }
     }
   },
   async created() {
     const docSnapshot = await songsCollection.doc(this.$route.params.id).get()
-    console.log(docSnapshot)
-
-    // if (!docSnapshot.exists) {
-    //   this.$router.push({ name: 'home' })
-    //   return
-    // }
-
-    this.song = docSnapshot
-  }
+    if (!docSnapshot.exists) {
+      this.$router.push({ name: 'home' })
+      return
+    }
+    this.song = docSnapshot.data()
+  },
+  components: { ErrorMessage }
 }
 </script>
