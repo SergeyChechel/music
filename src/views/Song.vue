@@ -36,7 +36,7 @@
         >
           {{ comment_alert_message }}
         </div>
-        <vee-form :validation-schema="schema" @submit="addComment">
+        <vee-form :validation-schema="schema" @submit="addComment" v-if="userLoggedIn">
           <vee-field
             as="textarea"
             name="comment"
@@ -142,6 +142,8 @@
 <script>
 import { songsCollection, auth, commentsCollection } from '@/includes/firebase'
 import { ErrorMessage } from 'vee-validate'
+import { mapState } from 'pinia'
+import useUserStore from '@/stores/user'
 
 export default {
   name: 'Song',
@@ -156,6 +158,9 @@ export default {
       comment_alert_variant: 'bg-blue-500',
       comment_alert_message: 'Please wait! Your comment is being submitted'
     }
+  },
+  computed: {
+    ...mapState(useUserStore, ['userLoggedIn'])
   },
   async created() {
     const docSnapshot = await songsCollection.doc(this.$route.params.id).get()
