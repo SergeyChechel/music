@@ -140,10 +140,10 @@
 </template>
 
 <script>
-import { songsCollection, auth, commentsCollection } from '@/includes/firebase'
-import { ErrorMessage } from 'vee-validate'
-import { mapState } from 'pinia'
-import useUserStore from '@/stores/user'
+import { songsCollection, auth, commentsCollection } from '@/includes/firebase';
+import { ErrorMessage } from 'vee-validate';
+import { mapState } from 'pinia';
+import useUserStore from '@/stores/user';
 
 export default {
   name: 'Song',
@@ -157,28 +157,26 @@ export default {
       comment_show_alert: false,
       comment_alert_variant: 'bg-blue-500',
       comment_alert_message: 'Please wait! Your comment is being submitted'
-    }
+    };
   },
   computed: {
     ...mapState(useUserStore, ['userLoggedIn'])
   },
   async created() {
-    const docSnapshot = await songsCollection.doc(this.$route.params.id).get()
+    const docSnapshot = await songsCollection.doc(this.$route.params.id).get();
     if (!docSnapshot.exists) {
-      this.$router.push({ name: 'home' })
-      return
+      this.$router.push({ name: 'home' });
+      return;
     }
-    this.song = docSnapshot.data()
+    this.song = docSnapshot.data();
   },
   components: { ErrorMessage },
   methods: {
     async addComment(values, { resetForm }) {
-      this.comment_in_submission = true
-      this.comment_show_alert = true
-      this.comment_alert_variant = 'bg-blue-500'
-      this.comment_alert_message = 'Please wait! Your comment is being submitted'
-
-      console.log(auth)
+      this.comment_in_submission = true;
+      this.comment_show_alert = true;
+      this.comment_alert_variant = 'bg-blue-500';
+      this.comment_alert_message = 'Please wait! Your comment is being submitted';
 
       const comment = {
         content: values.comment,
@@ -186,16 +184,19 @@ export default {
         sid: this.$route.params.id,
         name: auth.currentUser.displayName,
         uid: auth.currentUser.uid
-      }
+      };
 
-      await commentsCollection.add(comment)
+      await commentsCollection.add(comment);
 
-      this.comment_in_submission = false
-      this.comment_alert_variant = 'bg-green-500'
-      this.comment_alert_message = 'Comment added!'
+      this.comment_in_submission = false;
+      this.comment_alert_variant = 'bg-green-500';
+      this.comment_alert_message = 'Comment added!';
 
-      resetForm()
+      resetForm();
+    },
+    async getComments() {
+      const snaoshots = await commentsCollection.where();
     }
   }
-}
+};
 </script>

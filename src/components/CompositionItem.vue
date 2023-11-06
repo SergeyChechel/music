@@ -67,8 +67,8 @@
 </template>
 
 <script>
-import { ErrorMessage } from 'vee-validate'
-import { songsCollection, storage } from '@/includes/firebase'
+import { ErrorMessage } from 'vee-validate';
+import { songsCollection, storage } from '@/includes/firebase';
 
 export default {
   name: 'CompositionItem',
@@ -104,42 +104,42 @@ export default {
       show_alert: false,
       alert_variant: 'bg-blue-500',
       alert_message: 'Please wait! Updating song info.'
-    }
+    };
   },
   methods: {
     async edit(values) {
-      this.in_submission = true
-      this.show_alert = true
-      this.alert_variant = 'bg-blue-500'
-      this.alert_message = 'Please wait! Updating song info.'
+      this.in_submission = true;
+      this.show_alert = true;
+      this.alert_variant = 'bg-blue-500';
+      this.alert_message = 'Please wait! Updating song info.';
 
       try {
-        await songsCollection.doc(this.song.docID).update(values)
+        await songsCollection.doc(this.song.docID).update(values);
       } catch (error) {
-        this.in_submission = false
-        this.alert_variant = 'bg-red-500'
-        this.alert_message = 'Something went wrong! Try again later'
-        return
+        this.in_submission = false;
+        this.alert_variant = 'bg-red-500';
+        this.alert_message = 'Something went wrong! Try again later';
+        return;
       }
 
-      this.updateSong(this.index, values)
-      this.updateUnsavedFlag(false)
+      this.updateSong(this.index, values);
+      this.updateUnsavedFlag(false);
 
-      this.in_submission = false
-      this.alert_variant = 'bg-green-500'
-      this.alert_message = 'Success!'
+      this.in_submission = false;
+      this.alert_variant = 'bg-green-500';
+      this.alert_message = 'Success!';
     },
     async deleteSong() {
-      const storageRef = storage.ref()
-      const songRef = storageRef.child(`songs/${this.song.original_name}`)
+      const storageRef = storage.ref();
+      const songRef = storageRef.child(`songs/${this.song.original_name}`);
 
-      await songRef.delete()
+      await songRef.delete();
 
-      await songsCollection.doc(this.song.docID).delete()
+      await songsCollection.doc(this.song.docID).delete();
 
-      this.removeSong(this.index)
+      this.removeSong(this.index);
     }
   },
   components: { ErrorMessage }
-}
+};
 </script>

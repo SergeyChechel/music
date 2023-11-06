@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { storage, auth, songsCollection } from '@/includes/firebase'
+import { storage, auth, songsCollection } from '@/includes/firebase';
 
 export default {
   name: 'upload',
@@ -51,21 +51,21 @@ export default {
     return {
       is_dragover: false,
       uploads: []
-    }
+    };
   },
   props: ['addSong'],
   methods: {
     upload($event) {
-      this.is_dragover = false
+      this.is_dragover = false;
 
-      const files = $event.dataTransfer ? [...$event.dataTransfer.files] : [...$event.target.files]
+      const files = $event.dataTransfer ? [...$event.dataTransfer.files] : [...$event.target.files];
 
       files.forEach((file) => {
-        if (file.type !== 'audio/mpeg') return
+        if (file.type !== 'audio/mpeg') return;
 
-        const storageRef = storage.ref() // вернет объект, содержащий доменный адрес нашего проекта в firebase music-2fe52.appspot.com
-        const songsRef = storageRef.child(`songs/${file.name}`) // вернет объект, содержащий относительный путь - '/songs/<имя файла>.mp3'
-        const task = songsRef.put(file)
+        const storageRef = storage.ref(); // вернет объект, содержащий доменный адрес нашего проекта в firebase music-2fe52.appspot.com
+        const songsRef = storageRef.child(`songs/${file.name}`); // вернет объект, содержащий относительный путь - '/songs/<имя файла>.mp3'
+        const task = songsRef.put(file);
 
         const uploadIndex =
           this.uploads.push({
@@ -75,19 +75,19 @@ export default {
             variant: 'bg-blue-400',
             icon: 'fas fa-spinner fa-spin',
             text_class: ''
-          }) - 1
+          }) - 1;
 
         task.on(
           'state_changed',
           (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            this.uploads[uploadIndex].current_progress = progress
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            this.uploads[uploadIndex].current_progress = progress;
           },
           (error) => {
-            this.uploads[uploadIndex].variant = 'bg-red-400'
-            this.uploads[uploadIndex].icon = 'fas fa-times'
-            this.uploads[uploadIndex].text_class = 'text-red-600'
-            console.log(error)
+            this.uploads[uploadIndex].variant = 'bg-red-400';
+            this.uploads[uploadIndex].icon = 'fas fa-times';
+            this.uploads[uploadIndex].text_class = 'text-red-600';
+            console.log(error);
           },
           async () => {
             const song = {
@@ -97,31 +97,31 @@ export default {
               modified_name: task.snapshot.ref.name,
               genre: '',
               comment_count: 0
-            }
+            };
 
-            song.url = await task.snapshot.ref.getDownloadURL()
-            const songRef = await songsCollection.add(song)
-            const songSnapshot = await songRef.get()
+            song.url = await task.snapshot.ref.getDownloadURL();
+            const songRef = await songsCollection.add(song);
+            const songSnapshot = await songRef.get();
 
-            this.addSong(songSnapshot)
+            this.addSong(songSnapshot);
 
-            this.uploads[uploadIndex].variant = 'bg-green-400'
-            this.uploads[uploadIndex].icon = 'fas fa-check'
-            this.uploads[uploadIndex].text_class = 'text-green-600'
+            this.uploads[uploadIndex].variant = 'bg-green-400';
+            this.uploads[uploadIndex].icon = 'fas fa-check';
+            this.uploads[uploadIndex].text_class = 'text-green-600';
           }
-        )
-      })
+        );
+      });
     },
     cancelUploads() {
       this.uploads.forEach((upload) => {
-        upload.task.cancel()
-      })
+        upload.task.cancel();
+      });
     }
   },
   beforeUnmount() {
     this.uploads.forEach((upload) => {
-      upload.task.cancel()
-    })
+      upload.task.cancel();
+    });
   }
-}
+};
 </script>

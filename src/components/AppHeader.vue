@@ -36,9 +36,9 @@
 </template>
 
 <script>
-import { mapStores } from 'pinia'
-import useModalStore from '@/stores/modal'
-import useUserStore from '@/stores/user'
+import { mapStores } from 'pinia';
+import useModalStore from '@/stores/modal';
+import useUserStore from '@/stores/user';
 
 export default {
   name: 'AppHeader',
@@ -47,15 +47,15 @@ export default {
   },
   methods: {
     toggleAuthModal() {
-      this.modalStore.isOpen = !this.modalStore.isOpen
+      this.modalStore.isOpen = !this.modalStore.isOpen;
     },
     signOut() {
-      this.userStore.signOut()
+      this.userStore.signOut();
 
       if (this.$route.meta.requiresAuth) {
-        this.$router.push({ name: 'home' })
+        this.$router.push({ name: 'home' });
       }
     }
   }
-}
+};
 </script>
