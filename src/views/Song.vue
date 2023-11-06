@@ -73,7 +73,9 @@
       <!-- Comment Author -->
       <div class="mb-5">
         <div class="font-bold">{{ comment.name }}</div>
-        <time>{{ comment.datePosted }}</time>
+        <time class="text-xs">{{
+          comment.datePosted.slice(0, comment.datePosted.indexOf('G') - 1)
+        }}</time>
       </div>
 
       <p>{{ comment.content }}</p>
@@ -121,6 +123,9 @@ export default {
       return;
     }
 
+    const { sort } = this.$route.query;
+    this.sort = sort === '1' || sort === '2' ? sort : '1';
+
     this.song = docSnapshot.data();
     this.getComments();
   },
@@ -164,6 +169,8 @@ export default {
   },
   watch: {
     sort(newVal) {
+      if (newVal === this.$route.query.sort) return;
+
       this.$router.push({
         query: {
           sort: newVal
