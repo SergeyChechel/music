@@ -120,6 +120,7 @@ export default {
       this.$router.push({ name: 'home' });
       return;
     }
+
     this.song = docSnapshot.data();
     this.getComments();
   },
@@ -158,6 +159,15 @@ export default {
           docID: doc.id,
           ...doc.data()
         });
+      });
+    }
+  },
+  watch: {
+    sort(newVal) {
+      this.$router.push({
+        query: {
+          sort: newVal
+        }
       });
     }
   }
