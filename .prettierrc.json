@@ -3,6 +3,22 @@
   "semi": true,
   "tabWidth": 2,
   "singleQuote": true,
-  "printWidth": 100,
-  "trailingComma": "none"
+  "printWidth": 80,
+  "trailingComma": "none",
+  "overrides": [
+    {
+      "files": "src/**/*.js",
+      "options": {
+        "semi": true,
+        "singleQuote": true
+      }
+    },
+    {
+      "files": "src/**/*.vue",
+      "options": {
+        "semi": true,
+        "singleQuote": true
+      }
+    }
+  ]
 }
