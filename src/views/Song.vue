@@ -24,10 +24,18 @@
     </section>
     <!-- Form -->
     <section class="container mx-auto mt-6" id="comments">
-      <div class="bg-white rounded border border-gray-200 relative flex flex-col">
+      <div
+        class="bg-white rounded border border-gray-200 relative flex flex-col"
+      >
         <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
           <!-- Comment Count -->
-          <span class="card-title">Comments ({{ song.comment_count }})</span>
+          <span class="card-title">
+            {{
+              $tc('song.comment_count', song.comment_count, {
+                count: song.comment_count
+              })
+            }}
+          </span>
           <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
         </div>
         <div class="p-6">
@@ -38,7 +46,11 @@
           >
             {{ comment_alert_message }}
           </div>
-          <vee-form :validation-schema="schema" @submit="addComment" v-if="userLoggedIn">
+          <vee-form
+            :validation-schema="schema"
+            @submit="addComment"
+            v-if="userLoggedIn"
+          >
             <vee-field
               as="textarea"
               name="comment"
@@ -140,7 +152,8 @@ export default {
       this.comment_in_submission = true;
       this.comment_show_alert = true;
       this.comment_alert_variant = 'bg-blue-500';
-      this.comment_alert_message = 'Please wait! Your comment is being submitted';
+      this.comment_alert_message =
+        'Please wait! Your comment is being submitted';
 
       const comment = {
         content: values.comment,
@@ -166,7 +179,9 @@ export default {
       resetForm();
     },
     async getComments() {
-      const snapshots = await commentsCollection.where('sid', '==', this.$route.params.id).get();
+      const snapshots = await commentsCollection
+        .where('sid', '==', this.$route.params.id)
+        .get();
 
       this.comments = [];
       snapshots.forEach((doc) => {
