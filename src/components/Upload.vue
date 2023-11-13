@@ -58,10 +58,24 @@ export default {
     upload($event) {
       this.is_dragover = false;
 
-      const files = $event.dataTransfer ? [...$event.dataTransfer.files] : [...$event.target.files];
+      const files = $event.dataTransfer
+        ? [...$event.dataTransfer.files]
+        : [...$event.target.files];
 
       files.forEach((file) => {
         if (file.type !== 'audio/mpeg') return;
+
+        if (!navigator.onLine) {
+          this.uploads.push({
+            task: {},
+            current_progress: 100,
+            name: file.name,
+            variant: 'bg-red-400',
+            icon: 'fas fa-times',
+            text_class: 'text-red-400'
+          });
+          return;
+        }
 
         const storageRef = storage.ref(); // вернет объект, содержащий доменный адрес нашего проекта в firebase music-2fe52.appspot.com
         const songsRef = storageRef.child(`songs/${file.name}`); // вернет объект, содержащий относительный путь - '/songs/<имя файла>.mp3'
@@ -80,7 +94,8 @@ export default {
         task.on(
           'state_changed',
           (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             this.uploads[uploadIndex].current_progress = progress;
           },
           (error) => {
