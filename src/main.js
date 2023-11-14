@@ -1,5 +1,6 @@
 import './assets/base.css';
 import './assets/main.css';
+import 'nprogress/nprogress.css';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
@@ -11,13 +12,15 @@ import { auth } from './includes/firebase';
 import Icon from './directives/icon';
 import i18n from './includes/i18n';
 import GlobalComponents from './includes/_globals';
+import progressBar from './includes/progress-bar';
 import { registerSW } from 'virtual:pwa-register';
 
 if (process.env.NODE_ENV === 'production') {
   registerSW({ immediate: true });
   console.log('Production mode');
-} 
+}
 
+progressBar(router);
 
 let app;
 
