@@ -13,7 +13,11 @@ import i18n from './includes/i18n';
 import GlobalComponents from './includes/_globals';
 import { registerSW } from 'virtual:pwa-register';
 
-registerSW({ immediate: true });
+if (process.env.NODE_ENV === 'production') {
+  registerSW({ immediate: true });
+  console.log('Production mode');
+} 
+
 
 let app;
 
